@@ -36,7 +36,10 @@
 #include <vector>
 
 #include "common.h"
-
+#ifdef OPENCV
+#include "opencv2/highgui/highgui.hpp"
+#include "opencv2/imgproc/imgproc.hpp"
+#endif
 namespace seeta {
 
 class FaceDetection {
@@ -102,7 +105,9 @@ class FaceDetection {
   Impl* impl_;
 };
 
+#ifdef OPENCV
 SEETA_API cv::Rect MergeRect(std::vector<seeta::FaceInfo>& faces);
+#endif
 }  // namespace seeta
 
 #endif  // SEETA_FACE_DETECTION_H_

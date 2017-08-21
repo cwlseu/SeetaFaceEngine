@@ -137,6 +137,7 @@ void FaceDetection::SetScoreThresh(float thresh) {
     impl_->cls_thresh_ = thresh;
 }
 
+#ifdef OPENCV
 cv::Rect MergeRect(std::vector<seeta::FaceInfo>& faces)
 {
 
@@ -154,5 +155,5 @@ cv::Rect MergeRect(std::vector<seeta::FaceInfo>& faces)
       cv::Rect face_rect(lx, ly, rx - lx + 1, ry - ly + 1);
       return face_rect;
 }
-
+#endif
 }  // namespace seeta

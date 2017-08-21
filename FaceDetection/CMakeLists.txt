@@ -3,7 +3,8 @@ cmake_minimum_required(VERSION 3.1.0)
 project(seeta_facedet_lib)
 
 # Build options
-option(BUILD_EXAMPLES  "Set to ON to build examples"  ON)
+option(BUILD_PYTHON    "Set to ON to build python interface" ON)
+option(BUILD_EXAMPLES  "Set to ON to build examples"  OFF)
 option(USE_OPENMP      "Set to ON to build use openmp"  ON)
 option(USE_SSE         "Set to ON to build use SSE"  ON)
 
@@ -52,6 +53,27 @@ set(src_files
 # Build shared library
 add_library(seeta_facedet_lib SHARED ${src_files})
 set(facedet_required_libs seeta_facedet_lib)
+
+if (BUILD_PYTHON)
+    find_package(SWIG REQUIRED)
+    find_package(PythonLibs REQUIRED)
+
+    include(${SWIG_USE_FILE})
+    # set(CMAKE_SWIG_FLAGS)
+    include_directories(${OpenCV_INCLUDE_DIRS} /usr/include/python2.7)
+
+    set_source_files_properties(include/facedetect.i PROPERTIES CPLUSPLUS ON)
+    # set_source_files_properties(include/facedetect.i PROPERTIES SWIG_FLAGS "-includeall")
+    swig_add_module(pyfacedetect python include/facedetect.i ${src_files})
+    swig_link_libraries(pyfacedetect ${PYTHON_LIBRARIES})
+
+    # message(STATUS ${SWIG_USE_FILE})
+    # message(STATUS ${PYTHON_LIBRARIES})
+    # message(STATUS ${PYTHON_INCLUDE_DIRS})
+    # execute_process(COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
+    #install(TARGETS _target DESTINATION ${PYTHON_SITE_PACKAGES})
+    #install(FILES ${CMAKE_BINARY_DIR}/src/target.py DESTINATION ${PYTHON_SITE_PACKAGES})
+endif()
 
 # Build examples
 if (BUILD_EXAMPLES)
