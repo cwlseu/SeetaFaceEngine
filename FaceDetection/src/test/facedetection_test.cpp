@@ -61,7 +61,7 @@ int main(int argc, char** argv) {
     cv::cvtColor(img, img_gray, cv::COLOR_BGR2GRAY);
   else
     img_gray = img;
-  int min_size = std::min(img.rows, img.cols) / 12;
+  int min_size = std::max(30, std::min(img.rows, img.cols) / 12);
   std::cout << "min face size:" << min_size << std::endl;
   detector.SetMinFaceSize(min_size);
   detector.SetScoreThresh(2.f);
@@ -80,6 +80,7 @@ int main(int argc, char** argv) {
   double secs = (t1 - t0) / cv::getTickFrequency();
 
   cout << "Detections takes " << secs << " seconds " << endl;
+#if 0
 #ifdef USE_OPENMP 
   std::cout << "OpenMP is used." << endl;
 #else
@@ -91,7 +92,7 @@ int main(int argc, char** argv) {
 #else
   cout << "SSE is not used." << endl;
 #endif
-
+#endif
   cout << "Image size (wxh): " << img_data.width << "x"
        << img_data.height << endl;
 
