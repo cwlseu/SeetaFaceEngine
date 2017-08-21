@@ -102,6 +102,7 @@ class FaceDetection {
   Impl* impl_;
 };
 
+SEETA_API cv::Rect MergeRect(std::vector<seeta::FaceInfo>& faces);
 }  // namespace seeta
 
 #endif  // SEETA_FACE_DETECTION_H_

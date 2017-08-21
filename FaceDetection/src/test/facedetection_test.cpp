@@ -105,11 +105,12 @@ int main(int argc, char** argv) {
     face_rect.width = faces[i].bbox.width;
     face_rect.height = faces[i].bbox.height;
 
-    cv::rectangle(img, face_rect, CV_RGB(0, 0, 255), 4, 8, 0);
+    cv::rectangle(img, face_rect, CV_RGB(0, 255, 0), 1, 8, 0);
   }
 
-  cv::namedWindow("Test", cv::WINDOW_AUTOSIZE);
-  cv::imshow("Test", img);
-  cv::waitKey(0);
-  cv::destroyAllWindows();
+  //cv::namedWindow("Test", cv::WINDOW_AUTOSIZE);
+  //cv::imshow("Test", img);
+  cv::imwrite("result.jpg", img);
+  //cv::waitKey(0);
+  //cv::destroyAllWindows();
 }

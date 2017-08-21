@@ -137,4 +137,22 @@ void FaceDetection::SetScoreThresh(float thresh) {
     impl_->cls_thresh_ = thresh;
 }
 
+cv::Rect MergeRect(std::vector<seeta::FaceInfo>& faces)
+{
+
+      int32_t lx = INT_MAX, ly = INT_MAX;
+      int32_t rx = 0, ry = 0;
+      int32_t num_face = static_cast<int32_t>(faces.size());
+
+      for (int32_t i = 0; i < num_face; i++) {
+        lx = min(lx, faces[i].bbox.x);
+        ly = min(ly, faces[i].bbox.y);
+        rx = max(rx, faces[i].bbox.x + faces[i].bbox.width);
+        ry = max(ry, faces[i].bbox.y + faces[i].bbox.height);
+      }
+      
+      cv::Rect face_rect(lx, ly, rx - lx + 1, ry - ly + 1);
+      return face_rect;
+}
+
 }  // namespace seeta
