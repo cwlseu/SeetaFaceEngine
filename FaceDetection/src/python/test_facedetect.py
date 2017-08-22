@@ -1,4 +1,4 @@
 from pyfacedetect import FaceDetection
-from cv2.cv import imread, imwrite
+import cv2
 facedetect = FaceDetection("model/seeta_fd_frontal_v1.0.bin")
-imread()
+cv2.imread()

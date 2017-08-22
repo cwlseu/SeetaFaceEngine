@@ -56,20 +56,20 @@ set(facedet_required_libs seeta_facedet_lib)
 
 if (BUILD_PYTHON)
     find_package(SWIG REQUIRED)
+    find_package(OpenCV)
     find_package(PythonLibs REQUIRED)
 
     include(${SWIG_USE_FILE})
     # set(CMAKE_SWIG_FLAGS)
     include_directories(${OpenCV_INCLUDE_DIRS} /usr/include/python2.7)
+    list(APPEND facedet_required_libs ${OpenCV_LIBS} ${PYTHON_LIBRARIES})
 
+    message(STATUS ${OpenCV_INCLUDE_DIRS})
+    
     set_source_files_properties(include/facedetect.i PROPERTIES CPLUSPLUS ON)
-    # set_source_files_properties(include/facedetect.i PROPERTIES SWIG_FLAGS "-includeall")
     swig_add_module(pyfacedetect python include/facedetect.i ${src_files})
-    swig_link_libraries(pyfacedetect ${PYTHON_LIBRARIES})
+    swig_link_libraries(pyfacedetect ${facedet_required_libs})
 
-    # message(STATUS ${SWIG_USE_FILE})
-    # message(STATUS ${PYTHON_LIBRARIES})
-    # message(STATUS ${PYTHON_INCLUDE_DIRS})
     # execute_process(COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
     #install(TARGETS _target DESTINATION ${PYTHON_SITE_PACKAGES})
     #install(FILES ${CMAKE_BINARY_DIR}/src/target.py DESTINATION ${PYTHON_SITE_PACKAGES})

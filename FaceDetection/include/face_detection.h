@@ -106,8 +106,11 @@ class FaceDetection {
 };
 
 #ifdef OPENCV
-SEETA_API cv::Rect MergeRect(std::vector<seeta::FaceInfo>& faces);
+template <typename T>
+SEETA_API std::vector<cv::Rect> detect(T& img, std::string modelpath);
+
 #endif
+
 }  // namespace seeta
 
 #endif  // SEETA_FACE_DETECTION_H_
