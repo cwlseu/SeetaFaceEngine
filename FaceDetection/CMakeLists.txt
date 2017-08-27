@@ -4,7 +4,7 @@ project(seeta_facedet_lib)
 
 # Build options
 option(BUILD_PYTHON    "Set to ON to build python interface" ON)
-option(BUILD_EXAMPLES  "Set to ON to build examples"  OFF)
+option(BUILD_EXAMPLES  "Set to ON to build examples"  ON)
 option(USE_OPENMP      "Set to ON to build use openmp"  ON)
 option(USE_SSE         "Set to ON to build use SSE"  ON)
 
@@ -47,6 +47,7 @@ set(src_files
     src/classifier/mlp.cpp
     src/classifier/surf_mlp.cpp
     src/face_detection.cpp
+    src/crop_img.cpp
     src/fust.cpp
     )
 
@@ -60,19 +61,15 @@ if (BUILD_PYTHON)
     find_package(PythonLibs REQUIRED)
 
     include(${SWIG_USE_FILE})
-    # set(CMAKE_SWIG_FLAGS)
+    set(CMAKE_SWIG_FLAGS)
     include_directories(${OpenCV_INCLUDE_DIRS} /usr/include/python2.7)
-    list(APPEND facedet_required_libs ${OpenCV_LIBS} ${PYTHON_LIBRARIES})
+    list(APPEND facedet_required_libs ${OpenCV_LIBS})
 
     message(STATUS ${OpenCV_INCLUDE_DIRS})
-    
+    message(STATUS ${PYTHON_LIBRARIES})
     set_source_files_properties(include/facedetect.i PROPERTIES CPLUSPLUS ON)
     swig_add_module(pyfacedetect python include/facedetect.i ${src_files})
     swig_link_libraries(pyfacedetect ${facedet_required_libs})
-
-    # execute_process(COMMAND python -c "from distutils.sysconfig import get_python_lib; print get_python_lib()" OUTPUT_VARIABLE PYTHON_SITE_PACKAGES OUTPUT_STRIP_TRAILING_WHITESPACE)
-    #install(TARGETS _target DESTINATION ${PYTHON_SITE_PACKAGES})
-    #install(FILES ${CMAKE_BINARY_DIR}/src/target.py DESTINATION ${PYTHON_SITE_PACKAGES})
 endif()
 
 # Build examples
@@ -85,7 +82,9 @@ if (BUILD_EXAMPLES)
         include_directories(${OpenCV_INCLUDE_DIRS})
         list(APPEND facedet_required_libs ${OpenCV_LIBS})
         
-        add_executable(facedet_test src/test/facedetection_test.cpp)
-        target_link_libraries(facedet_test ${facedet_required_libs})
+        # add_executable(facedet_test src/test/facedetection_test.cpp)
+        # target_link_libraries(facedet_test ${facedet_required_libs})
+        add_executable(imgcrop_test src/test/imgcrop_test.cpp)
+        target_link_libraries(imgcrop_test ${facedet_required_libs})
     endif()
 endif()

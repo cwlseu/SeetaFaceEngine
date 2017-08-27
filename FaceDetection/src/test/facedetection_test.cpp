@@ -42,17 +42,20 @@
 using namespace std;
 
 int main(int argc, char** argv) {
-  if (argc < 2) {
-    cout << "Usage: " << argv[0]
-         << " image_path"
-         << endl;
-    return -1;
+  if (argc < 3) {
+      cout << "Usage: " << argv[0]
+          << " image_path model_path"
+          << endl;
+      return -1;
   }
 
   const char* img_path = argv[1];
-  seeta::FaceDetection detector("model/seeta_fd_frontal_v1.0.bin");
+  seeta::FaceDetection detector(argv[2]);
 
-
+  detector.SetMinFaceSize(40);
+  detector.SetScoreThresh(2.f);
+  detector.SetImagePyramidScaleFactor(0.8f);
+  detector.SetWindowStep(4, 4);
 
   cv::Mat img = cv::imread(img_path, cv::IMREAD_UNCHANGED);
   cv::Mat img_gray;
@@ -61,12 +64,6 @@ int main(int argc, char** argv) {
     cv::cvtColor(img, img_gray, cv::COLOR_BGR2GRAY);
   else
     img_gray = img;
-  int min_size = std::max(30, std::min(img.rows, img.cols) / 12);
-  std::cout << "min face size:" << min_size << std::endl;
-  detector.SetMinFaceSize(min_size);
-  detector.SetScoreThresh(2.f);
-  detector.SetImagePyramidScaleFactor(0.8f);
-  detector.SetWindowStep(4, 4);
 
   seeta::ImageData img_data;
   img_data.data = img_gray.data;
@@ -77,14 +74,13 @@ int main(int argc, char** argv) {
   long t0 = cv::getTickCount();
   std::vector<seeta::FaceInfo> faces = detector.Detect(img_data);
   long t1 = cv::getTickCount();
-  double secs = (t1 - t0) / cv::getTickFrequency();
+  double secs = (t1 - t0)/cv::getTickFrequency();
 
   cout << "Detections takes " << secs << " seconds " << endl;
-#if 0
-#ifdef USE_OPENMP 
-  std::cout << "OpenMP is used." << endl;
+#ifdef USE_OPENMP
+  cout << "OpenMP is used." << endl;
 #else
-  std::cout << "OpenMP is not used. " << endl;
+  cout << "OpenMP is not used. " << endl;
 #endif
 
 #ifdef USE_SSE
@@ -92,9 +88,9 @@ int main(int argc, char** argv) {
 #else
   cout << "SSE is not used." << endl;
 #endif
-#endif
-  cout << "Image size (wxh): " << img_data.width << "x"
-       << img_data.height << endl;
+
+  cout << "Image size (wxh): " << img_data.width << "x" 
+      << img_data.height << endl;
 
   cv::Rect face_rect;
   int32_t num_face = static_cast<int32_t>(faces.size());
@@ -105,12 +101,11 @@ int main(int argc, char** argv) {
     face_rect.width = faces[i].bbox.width;
     face_rect.height = faces[i].bbox.height;
 
-    cv::rectangle(img, face_rect, CV_RGB(0, 255, 0), 1, 8, 0);
+    cv::rectangle(img, face_rect, CV_RGB(0, 0, 255), 4, 8, 0);
   }
 
-  //cv::namedWindow("Test", cv::WINDOW_AUTOSIZE);
-  //cv::imshow("Test", img);
-  cv::imwrite("result.jpg", img);
-  //cv::waitKey(0);
-  //cv::destroyAllWindows();
+  cv::namedWindow("Test", cv::WINDOW_AUTOSIZE);
+  cv::imshow("Test", img);
+  cv::waitKey(0);
+  cv::destroyAllWindows();
 }

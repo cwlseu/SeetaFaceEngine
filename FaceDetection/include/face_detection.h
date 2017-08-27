@@ -36,10 +36,7 @@
 #include <vector>
 
 #include "common.h"
-#ifdef OPENCV
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#endif
+
 namespace seeta {
 
 class FaceDetection {
@@ -104,12 +101,6 @@ class FaceDetection {
   class Impl;
   Impl* impl_;
 };
-
-#ifdef OPENCV
-template <typename T>
-SEETA_API std::vector<cv::Rect> detect(T& img, std::string modelpath);
-
-#endif
 
 }  // namespace seeta
 

@@ -69,27 +69,6 @@ except AttributeError:
     _newclass = 0
 
 
-class FaceDetection(_object):
-    __swig_setmethods__ = {}
-    __setattr__ = lambda self, name, value: _swig_setattr(self, FaceDetection, name, value)
-    __swig_getmethods__ = {}
-    __getattr__ = lambda self, name: _swig_getattr(self, FaceDetection, name)
-    __repr__ = _swig_repr
-    def __init__(self, *args): 
-        this = _pyfacedetect.new_FaceDetection(*args)
-        try: self.this.append(this)
-        except: self.this = this
-    __swig_destroy__ = _pyfacedetect.delete_FaceDetection
-    __del__ = lambda self : None;
-    def Detect(self, *args): return _pyfacedetect.FaceDetection_Detect(self, *args)
-    def SetMinFaceSize(self, *args): return _pyfacedetect.FaceDetection_SetMinFaceSize(self, *args)
-    def SetMaxFaceSize(self, *args): return _pyfacedetect.FaceDetection_SetMaxFaceSize(self, *args)
-    def SetImagePyramidScaleFactor(self, *args): return _pyfacedetect.FaceDetection_SetImagePyramidScaleFactor(self, *args)
-    def SetWindowStep(self, *args): return _pyfacedetect.FaceDetection_SetWindowStep(self, *args)
-    def SetScoreThresh(self, *args): return _pyfacedetect.FaceDetection_SetScoreThresh(self, *args)
-FaceDetection_swigregister = _pyfacedetect.FaceDetection_swigregister
-FaceDetection_swigregister(FaceDetection)
-
 class ImageData(_object):
     __swig_setmethods__ = {}
     __setattr__ = lambda self, name, value: _swig_setattr(self, ImageData, name, value)
@@ -195,6 +174,31 @@ class FacialLandmark(_object):
 FacialLandmark_swigregister = _pyfacedetect.FacialLandmark_swigregister
 FacialLandmark_swigregister(FacialLandmark)
 
+class Rects(_object):
+    __swig_setmethods__ = {}
+    __setattr__ = lambda self, name, value: _swig_setattr(self, Rects, name, value)
+    __swig_getmethods__ = {}
+    __getattr__ = lambda self, name: _swig_getattr(self, Rects, name)
+    __repr__ = _swig_repr
+    __swig_setmethods__["num"] = _pyfacedetect.Rects_num_set
+    __swig_getmethods__["num"] = _pyfacedetect.Rects_num_get
+    if _newclass:num = _swig_property(_pyfacedetect.Rects_num_get, _pyfacedetect.Rects_num_set)
+    __swig_setmethods__["data"] = _pyfacedetect.Rects_data_set
+    __swig_getmethods__["data"] = _pyfacedetect.Rects_data_get
+    if _newclass:data = _swig_property(_pyfacedetect.Rects_data_get, _pyfacedetect.Rects_data_set)
+    def __init__(self, *args): 
+        this = _pyfacedetect.new_Rects(*args)
+        try: self.this.append(this)
+        except: self.this = this
+    __swig_destroy__ = _pyfacedetect.delete_Rects
+    __del__ = lambda self : None;
+Rects_swigregister = _pyfacedetect.Rects_swigregister
+Rects_swigregister(Rects)
+
+
+def detectface(*args):
+  return _pyfacedetect.detectface(*args)
+detectface = _pyfacedetect.detectface
 # This file is compatible with both classic and new-style classes.
 
 

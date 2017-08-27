@@ -37,12 +37,7 @@
 #include "detector.h"
 #include "fust.h"
 #include "util/image_pyramid.h"
- 
-#ifdef OPENCV
-#include "opencv2/highgui/highgui.hpp"
-#include "opencv2/imgproc/imgproc.hpp"
-#endif
- 
+
 namespace seeta {
 
 class FaceDetection::Impl {
@@ -142,64 +137,4 @@ void FaceDetection::SetScoreThresh(float thresh) {
     impl_->cls_thresh_ = thresh;
 }
 
-#ifdef OPENCV
-// using namespace cv;
-// cv::Rect MergeRect(std::vector<seeta::FaceInfo>& faces)
-// {
-
-//       int32_t lx = INT_MAX, ly = INT_MAX;
-//       int32_t rx = 0, ry = 0;
-//       int32_t num_face = static_cast<int32_t>(faces.size());
-
-//       for (int32_t i = 0; i < num_face; i++) {
-//         lx = min(lx, faces[i].bbox.x);
-//         ly = min(ly, faces[i].bbox.y);
-//         rx = max(rx, faces[i].bbox.x + faces[i].bbox.width);
-//         ry = max(ry, faces[i].bbox.y + faces[i].bbox.height);
-//       }
-      
-//       cv::Rect face_rect(lx, ly, rx - lx + 1, ry - ly + 1);
-//       return face_rect;
-// }
-
-template <>
-std::vector<cv::Rect> detect(cv::Mat& img, std::string model_path)
-{
-  cv::Mat img_gray;
-
-  if (img.channels() != 1)
-    cv::cvtColor(img, img_gray, cv::COLOR_BGR2GRAY);
-  else
-    img_gray = img;
-
-  seeta::FaceDetection detector(model_path);
-  int min_size = std::max(30, std::min(img.rows, img.cols) / 12);
-  detector.SetMinFaceSize(min_size);
-  detector.SetScoreThresh(2.f);
-  detector.SetImagePyramidScaleFactor(0.8f);
-  detector.SetWindowStep(4, 4);
-
-  seeta::ImageData img_data;
-  img_data.data = img_gray.data;
-  img_data.width = img_gray.cols;
-  img_data.height = img_gray.rows;
-  img_data.num_channels = 1;
-
-  std::vector<seeta::FaceInfo> faces = detector.Detect(img_data);
-  int32_t num_face = static_cast<int32_t>(faces.size());
-  std::vector<cv::Rect> cvfaces;
-  for (int32_t i = 0; i < num_face; i++) {
-    cv::Rect rect(faces[i].bbox.x, faces[i].bbox.y, faces[i].bbox.width, faces[i].bbox.height);
-    cvfaces.push_back(rect);
-  }
-  return cvfaces;
-}
-template <>
-std::vector<cv::Rect> detect(string& filename)
-{
-  seeta::FaceDetection detector(model_path);
-  cv::Mat img = cv::imread(filename, cv::IMREAD_GRAYSCALE);
-  return detect(img);
-}
-#endif
 }  // namespace seeta
